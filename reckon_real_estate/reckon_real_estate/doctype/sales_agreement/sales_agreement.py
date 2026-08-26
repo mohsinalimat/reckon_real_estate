@@ -18,6 +18,7 @@ class SalesAgreement(Document):
         self.company = frappe.db.get_value("Real Estate Project", booking.project, "company")
         self.contract_value, self.discount = booking.contract_value, booking.discount
         self.net_contract_value, self.booking_money = booking.net_contract_value, booking.booking_money
+        self.buyer_name = frappe.db.get_value("Customer", self.customer, "customer_name") or self.customer
         duplicate = frappe.db.exists("Sales Agreement", {
             "booking": self.booking, "name": ["!=", self.name], "docstatus": ["!=", 2]
         })
