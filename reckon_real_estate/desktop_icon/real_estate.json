@@ -4,6 +4,7 @@
   "label": "Reckon Real Estate",
   "app": "reckon_real_estate",
   "icon": "building-2",
+  "logo_url": "/assets/reckon_real_estate/images/real-estate.svg",
   "icon_type": "Link",
   "link_to": "Real Estate",
   "link_type": "Workspace Sidebar",
