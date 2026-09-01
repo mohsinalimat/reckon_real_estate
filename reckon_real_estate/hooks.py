@@ -4,11 +4,12 @@ app_publisher = "Reckon Technologies Ltd."
 app_description = "Real Estate vertical for ERPNext"
 app_email = "hello@reckon.tech"
 app_license = "MIT"
+app_logo_url = "/assets/reckon_real_estate/images/real-estate.svg"
 
 add_to_apps_screen = [
     {
         "name": "reckon_real_estate",
-        "logo": "/assets/reckon_real_estate/images/real-estate.svg",
+        "logo": app_logo_url,
         "title": "Real Estate",
         # Frappe 16 serves Desk routes below /desk.  The /app route is retained
         # by Frappe 15, but is not the Desk launcher route in Frappe 16.
