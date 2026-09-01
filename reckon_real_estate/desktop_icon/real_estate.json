@@ -1,0 +1,14 @@
+{
+  "doctype": "Desktop Icon",
+  "name": "Real Estate",
+  "label": "Reckon Real Estate",
+  "app": "reckon_real_estate",
+  "icon": "building-2",
+  "icon_type": "Link",
+  "link_to": "Real Estate",
+  "link_type": "Workspace Sidebar",
+  "hidden": 0,
+  "restrict_removal": 0,
+  "standard": 1,
+  "roles": []
+}
