@@ -8,8 +8,11 @@ app_license = "MIT"
 add_to_apps_screen = [
     {
         "name": "reckon_real_estate",
+        "logo": "/assets/reckon_real_estate/images/real-estate.svg",
         "title": "Real Estate",
-        "route": "/app/real-estate",
+        # Frappe 16 serves Desk routes below /desk.  The /app route is retained
+        # by Frappe 15, but is not the Desk launcher route in Frappe 16.
+        "route": "/desk/real-estate",
     }
 ]
 
