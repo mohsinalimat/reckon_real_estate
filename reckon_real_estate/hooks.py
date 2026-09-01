@@ -6,17 +6,6 @@ app_email = "hello@reckon.tech"
 app_license = "MIT"
 app_logo_url = "/assets/reckon_real_estate/images/real-estate.svg"
 
-add_to_apps_screen = [
-    {
-        "name": "reckon_real_estate",
-        "logo": app_logo_url,
-        "title": "Real Estate",
-        # Frappe 16 serves Desk routes below /desk.  The /app route is retained
-        # by Frappe 15, but is not the Desk launcher route in Frappe 16.
-        "route": "/desk/real-estate",
-    }
-]
-
 # ERPNext already depends on Frappe, so it is the only app dependency that
 # needs to be declared here.
 required_apps = ["erpnext"]

@@ -115,15 +115,24 @@ def after_migrate():
 
 
 def ensure_desk_navigation():
-    """Repair the app's Desktop Icon after a migration.
+    """Keep one Real Estate Desktop Icon after a migration.
 
     Frappe preserves existing standard Desktop Icon rows and user layouts.  Older
-    installations therefore retain the generated ``building-2`` glyph even after
-    the app ships a logo URL.  Update the app-owned row explicitly so the Desk
-    template receives ``logo_url`` and renders the SVG image branch.
+    installations can therefore retain the app-screen launcher in addition to
+    the workspace launcher. Remove that obsolete app-named row, then update the
+    workspace icon so the Desk template renders the SVG image branch.
     """
     if not frappe.db.exists("DocType", "Desktop Icon"):
         return
+
+    obsolete_icons = frappe.get_all(
+        "Desktop Icon",
+        filters={"app": "reckon_real_estate", "label": "Reckon Real Estate"},
+        pluck="name",
+    )
+    for name in obsolete_icons:
+        if name != "Real Estate":
+            frappe.delete_doc("Desktop Icon", name, force=True, ignore_permissions=True)
 
     values = {
         "label": "Real Estate",
