@@ -1,7 +1,7 @@
 {
   "doctype": "Desktop Icon",
   "name": "Real Estate",
-  "label": "Reckon Real Estate",
+  "label": "Real Estate",
   "app": "reckon_real_estate",
   "icon": "building-2",
   "logo_url": "/assets/reckon_real_estate/images/real-estate.svg",

@@ -59,6 +59,7 @@ LEGACY_MODULES = (
     "Reckon Collection",
     "Reckon Reports",
 )
+REAL_ESTATE_LOGO_URL = "/assets/reckon_real_estate/images/real-estate.svg"
 
 
 def _major_version(app_name):
@@ -95,6 +96,7 @@ def before_install():
 
 def after_install():
     """Confirm that app schema sync created every Release 1 DocType."""
+    ensure_desk_navigation()
     cleanup_legacy_modules()
     cleanup_legacy_reports()
     ensure_erpnext_custom_fields()
@@ -104,11 +106,52 @@ def after_install():
 
 def after_migrate():
     """Recheck the schema after an app update or framework migration."""
+    ensure_desk_navigation()
     cleanup_legacy_modules()
     cleanup_legacy_reports()
     ensure_erpnext_custom_fields()
     ensure_home_analytics()
     validate_installation()
+
+
+def ensure_desk_navigation():
+    """Repair the app's Desktop Icon after a migration.
+
+    Frappe preserves existing standard Desktop Icon rows and user layouts.  Older
+    installations therefore retain the generated ``building-2`` glyph even after
+    the app ships a logo URL.  Update the app-owned row explicitly so the Desk
+    template receives ``logo_url`` and renders the SVG image branch.
+    """
+    if not frappe.db.exists("DocType", "Desktop Icon"):
+        return
+
+    values = {
+        "label": "Real Estate",
+        "app": "reckon_real_estate",
+        "icon": "building-2",
+        "logo_url": REAL_ESTATE_LOGO_URL,
+        "icon_type": "Link",
+        "link_to": "Real Estate",
+        "link_type": "Workspace Sidebar",
+        "hidden": 0,
+        "standard": 1,
+    }
+    fields = {field.fieldname for field in frappe.get_meta("Desktop Icon").fields}
+    values = {field: value for field, value in values.items() if field in fields}
+
+    if frappe.db.exists("Desktop Icon", "Real Estate"):
+        icon = frappe.get_doc("Desktop Icon", "Real Estate")
+        icon.update(values)
+        icon.flags.ignore_permissions = True
+        icon.flags.ignore_mandatory = True
+        icon.save()
+    else:
+        frappe.get_doc({"doctype": "Desktop Icon", "name": "Real Estate", **values}).insert(
+            ignore_permissions=True
+        )
+
+    frappe.cache.delete_key("desktop_icons")
+    frappe.cache.delete_key("bootinfo")
 
 
 def ensure_home_analytics():
