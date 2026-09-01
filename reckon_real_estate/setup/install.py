@@ -125,12 +125,21 @@ def ensure_desk_navigation():
     if not frappe.db.exists("DocType", "Desktop Icon"):
         return
 
-    obsolete_icons = frappe.get_all(
-        "Desktop Icon",
-        filters={"app": "reckon_real_estate", "label": "Reckon Real Estate"},
-        pluck="name",
+    app_icons = set(
+        frappe.get_all(
+            "Desktop Icon",
+            filters={"app": "reckon_real_estate"},
+            pluck="name",
+        )
     )
-    for name in obsolete_icons:
+    app_icons.update(
+        frappe.get_all(
+            "Desktop Icon",
+            filters={"label": "Reckon Real Estate"},
+            pluck="name",
+        )
+    )
+    for name in app_icons:
         if name != "Real Estate":
             frappe.delete_doc("Desktop Icon", name, force=True, ignore_permissions=True)
 
