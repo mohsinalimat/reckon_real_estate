@@ -22,6 +22,15 @@ def test_release_2_doctypes_are_present():
     assert expected <= {path.name for path in base.iterdir() if path.is_dir()}
 
 
+def test_real_estate_roles_are_created_during_install_and_migration():
+    install = (ROOT / "setup" / "install.py").read_text(encoding="utf-8")
+
+    assert '"Reckon Real Estate User"' in install
+    assert '"Reckon Real Estate Manager"' in install
+    assert install.count("ensure_app_roles()") == 2
+    assert '"desk_access": 1' in install
+
+
 def test_release_2_fields_have_labels_and_child_grids_have_columns():
     base = ROOT / "reckon_real_estate" / "doctype"
     release_2 = {

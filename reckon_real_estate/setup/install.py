@@ -7,6 +7,10 @@ import frappe
 
 
 SUPPORTED_MAJOR_VERSIONS = {"15", "16"}
+APP_ROLES = (
+    "Reckon Real Estate User",
+    "Reckon Real Estate Manager",
+)
 REQUIRED_DOCTYPES = (
     "Real Estate Project",
     "Real Estate Building",
@@ -96,6 +100,7 @@ def before_install():
 
 def after_install():
     """Confirm that app schema sync created every Release 1 DocType."""
+    ensure_app_roles()
     ensure_desk_navigation()
     cleanup_legacy_modules()
     cleanup_legacy_reports()
@@ -106,12 +111,30 @@ def after_install():
 
 def after_migrate():
     """Recheck the schema after an app update or framework migration."""
+    ensure_app_roles()
     ensure_desk_navigation()
     cleanup_legacy_modules()
     cleanup_legacy_reports()
     ensure_erpnext_custom_fields()
     ensure_home_analytics()
     validate_installation()
+
+
+def ensure_app_roles():
+    """Create the Desk roles used to grant access to Real Estate features."""
+    for role_name in APP_ROLES:
+        if frappe.db.exists("Role", role_name):
+            if not frappe.db.get_value("Role", role_name, "desk_access"):
+                frappe.db.set_value("Role", role_name, "desk_access", 1)
+            continue
+
+        frappe.get_doc(
+            {
+                "doctype": "Role",
+                "role_name": role_name,
+                "desk_access": 1,
+            }
+        ).insert(ignore_permissions=True)
 
 
 def ensure_desk_navigation():
