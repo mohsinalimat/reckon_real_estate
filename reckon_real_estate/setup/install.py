@@ -11,6 +11,17 @@ APP_ROLES = (
     "Reckon Real Estate User",
     "Reckon Real Estate Manager",
 )
+APP_REPORTS = (
+    "Accounting Reconciliation",
+    "Budget vs Actual",
+    "Collection Overdue",
+    "Construction Dashboard",
+    "Executive Dashboard",
+    "Installment Due Collection Aging",
+    "Project Profitability",
+    "Property Ledger",
+    "Unit Availability",
+)
 REQUIRED_DOCTYPES = (
     "Real Estate Project",
     "Real Estate Building",
@@ -101,6 +112,7 @@ def before_install():
 def after_install():
     """Confirm that app schema sync created every Release 1 DocType."""
     ensure_app_roles()
+    ensure_app_role_permissions()
     ensure_desk_navigation()
     cleanup_legacy_modules()
     cleanup_legacy_reports()
@@ -112,6 +124,7 @@ def after_install():
 def after_migrate():
     """Recheck the schema after an app update or framework migration."""
     ensure_app_roles()
+    ensure_app_role_permissions()
     ensure_desk_navigation()
     cleanup_legacy_modules()
     cleanup_legacy_reports()
@@ -135,6 +148,70 @@ def ensure_app_roles():
                 "desk_access": 1,
             }
         ).insert(ignore_permissions=True)
+
+
+def ensure_app_role_permissions():
+    """Grant the app roles access to all non-child Real Estate DocTypes.
+
+    Role creation alone does not add entries to Role Permission Manager.  Use
+    Custom DocPerm rows so this also repairs existing sites without editing or
+    replacing the standard permissions shipped with each DocType.
+    """
+    from frappe.permissions import add_permission, update_permission_property
+
+    permission_fields = (
+        "select", "read", "write", "create", "delete", "submit", "cancel", "amend",
+        "report", "export", "import", "share", "print", "email",
+    )
+    manager_permissions = set(permission_fields)
+    user_permissions = {
+        "select", "read", "write", "create", "submit", "report", "export", "print", "email",
+    }
+
+    for doctype in REQUIRED_DOCTYPES:
+        if not frappe.db.exists("DocType", doctype):
+            continue
+
+        meta = frappe.get_meta(doctype)
+        if meta.istable:
+            continue
+
+        for role, enabled_permissions in (
+            ("Reckon Real Estate User", user_permissions),
+            ("Reckon Real Estate Manager", manager_permissions),
+        ):
+            if not frappe.db.exists(
+                "Custom DocPerm",
+                {"parent": doctype, "role": role, "permlevel": 0, "if_owner": 0},
+            ):
+                add_permission(doctype, role, 0)
+            for permission in permission_fields:
+                enabled = permission in enabled_permissions
+                if permission in {"submit", "cancel", "amend"} and not meta.is_submittable:
+                    enabled = False
+                update_permission_property(
+                    doctype, role, 0, permission, int(enabled), validate=False
+                )
+
+    ensure_app_report_roles()
+
+
+def ensure_app_report_roles():
+    """Allow both app roles to open every standard Real Estate report."""
+    for report_name in APP_REPORTS:
+        if not frappe.db.exists("Report", report_name):
+            continue
+
+        report = frappe.get_doc("Report", report_name)
+        existing_roles = {row.role for row in report.roles}
+        changed = False
+        for role in APP_ROLES:
+            if role not in existing_roles:
+                report.append("roles", {"role": role})
+                changed = True
+        if changed:
+            report.flags.ignore_permissions = True
+            report.save()
 
 
 def ensure_desk_navigation():

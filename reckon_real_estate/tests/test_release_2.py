@@ -27,8 +27,22 @@ def test_real_estate_roles_are_created_during_install_and_migration():
 
     assert '"Reckon Real Estate User"' in install
     assert '"Reckon Real Estate Manager"' in install
-    assert install.count("ensure_app_roles()") == 2
+    # Two hook calls plus the function definition.
+    assert install.count("ensure_app_roles()") == 3
     assert '"desk_access": 1' in install
+
+
+def test_real_estate_roles_receive_doctype_and_report_permissions():
+    install = (ROOT / "setup" / "install.py").read_text(encoding="utf-8")
+
+    # Two hook calls plus the function definition.
+    assert install.count("ensure_app_role_permissions()") == 3
+    assert "from frappe.permissions import add_permission, update_permission_property" in install
+    assert "for doctype in REQUIRED_DOCTYPES:" in install
+    assert "if meta.istable:" in install
+    assert '"Reckon Real Estate User", user_permissions' in install
+    assert '"Reckon Real Estate Manager", manager_permissions' in install
+    assert "ensure_app_report_roles()" in install
 
 
 def test_release_2_fields_have_labels_and_child_grids_have_columns():
