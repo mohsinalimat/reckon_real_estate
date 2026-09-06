@@ -1,0 +1,29 @@
+{
+  "reference_sha256": "13504f6c221a42c1726460a9e865e563355539ff97d702d6c9b2267b4b261d76",
+  "parts": {
+    "word/header1.xml": "3bf69710819b375475073d4b0ee633a04c2f64aa732cb859f7e6fbcf91e82a15",
+    "word/header2.xml": "963cce02bd0011b04cb2276d81a515d7dbe3f0e4d7a0512a1dcb43c338501783",
+    "word/footer1.xml": "7379a8a738857d8716819a7a33278f11eed3b227cb6d4b8583e24ea71d82caa9",
+    "word/footer2.xml": "dec75ce89f56d3f0d5642fc6826ffb519ba7a66d568c61615354a81d4dbd3f92",
+    "word/footnotes.xml": "32800f6ede848974200ec3b5ccdec0441f34232b21cb8032eeaee08423cd64ad",
+    "word/numbering.xml": "8ae47749605f60cda2f453d4fb1d4ee48edf498ca44224a5e6cbc047603725c6",
+    "word/settings.xml": "fb088d0a3dbf7f5e5a5a399b898acf16aa2a6fc3b2984bc3eb0d4946f73ac005",
+    "word/fontTable.xml": "fbf051c0789377c917324a8d58f9f5da42e1e3c4ccd1324e3280bca9e3372b48",
+    "word/_rels/fontTable.xml.rels": "9e696b4181565fe8b8033e71faa2ce80663faba9392b00873fc0dcf2667fcd21",
+    "word/styles.xml": "97d73aa6932aa6da7c1bcd45943ca9b123c95ed0ebb5f032a8910d040fcc4298",
+    "word/document.xml": "db8a6819670a90e1ab4c805072770dfc6cc9f5abb1de441dcdbc545b4c0e8a1e",
+    "word/_rels/document.xml.rels": "e0aaf0daccdeb2e03cf0f0d0518dac5d9ec367392a1819ad673de36fa344cca4",
+    "_rels/.rels": "77494e8e16bbf29213e494792349e3d49d2397a4007b2816a058337d804e79a1",
+    "word/fonts/HelveticaNeueLight-regular.ttf": "86fadd919d6b0c78b61b928828768a3137b9ad67e9a14ddc2891c6ce25b23f0f",
+    "word/fonts/HelveticaNeueLight-bold.ttf": "f4b06f1a460c24da8a2a62210250f662064d1ec9ed3b0ef1d673f281e5445426",
+    "word/fonts/HelveticaNeue-bold.ttf": "d55d0ca5a027475c35cfc5a9ebf038e5d0d7c5140083ec2732a67727eaeb20c5",
+    "word/fonts/HelveticaNeue-regular.ttf": "f4b06f1a460c24da8a2a62210250f662064d1ec9ed3b0ef1d673f281e5445426",
+    "word/theme/theme1.xml": "742bf86bb312d06389e21644f7e861273fe4f124f422c57cce0c28360b06f32d",
+    "word/media/image1.png": "4e2f1a97fcad1f6ebfc0bd5e2b2783c4bf0cf9de908bc63ce150666738ac5537",
+    "word/fonts/HelveticaNeueLight-italic.ttf": "da6d9fc94465945e04009194d533da3e1ec96c7f6177ee6a77fa89247d3c5784",
+    "word/fonts/HelveticaNeue-boldItalic.ttf": "ba7822562fd8133eef9d83d197cdb19e55cfc5a4077029e081aa38f07a7981e5",
+    "word/fonts/HelveticaNeueLight-boldItalic.ttf": "a627c106749fdc7c3893c3e1385de3f73f7c311c8cf841c5a2176f55a6883cae",
+    "word/fonts/HelveticaNeue-italic.ttf": "a627c106749fdc7c3893c3e1385de3f73f7c311c8cf841c5a2176f55a6883cae",
+    "[Content_Types].xml": "4c3be72f4c54fad4fc7c3a0e3c0b80b63d285c2b07c761853cdcb1075ac9dd18"
+  }
+}

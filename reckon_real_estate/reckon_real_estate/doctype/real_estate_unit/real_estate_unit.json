@@ -133,7 +133,7 @@
       "fieldname": "erpnext_item",
       "fieldtype": "Link",
       "label": "ERPNext Item",
-      "reqd": 0,
+      "reqd": 1,
       "options": "Item"
     },
     {

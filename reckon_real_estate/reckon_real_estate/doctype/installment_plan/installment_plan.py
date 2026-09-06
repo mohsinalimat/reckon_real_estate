@@ -1,6 +1,7 @@
 import frappe
 from frappe.model.document import Document
 from frappe.utils import getdate, today
+from reckon_real_estate.payment_schedule import consolidate_due_dates
 
 from reckon_real_estate.construction_workflow import block_if_submitted, require_submitted, set_cancelled_status, set_draft_status, set_submitted_status
 
@@ -96,6 +97,7 @@ def make_sales_invoice(source_name):
     if frappe.utils.flt(source.down_payment):
         schedule.append((source.plan_start_date, frappe.utils.flt(source.down_payment), "Booking / Down Payment"))
     schedule.extend((row.due_date, frappe.utils.flt(row.total_amount), row.description) for row in source.installments)
+    schedule = consolidate_due_dates(schedule)
     total = frappe.utils.flt(agreement.net_contract_value)
     allocated_portion = 0
     for index, (due_date, amount, description) in enumerate(schedule):

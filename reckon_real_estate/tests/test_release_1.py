@@ -16,6 +16,14 @@ class TestRelease1(FrappeTestCase):
         doc.unit_type = "Apartment"
         doc.area_sqft = 1000
         doc.base_rate_per_sqft = 5000
+        item_code = "TEST-REAL-ESTATE-UNIT"
+        if not frappe.db.exists("Item", item_code):
+            frappe.get_doc({
+                "doctype": "Item", "item_code": item_code,
+                "item_name": "Test Real Estate Unit", "is_stock_item": 0,
+                "item_group": "All Item Groups", "stock_uom": "Nos",
+            }).insert()
+        doc.erpnext_item = item_code
         doc.insert()
         self.assertEqual(doc.list_price, 5000000)
 
