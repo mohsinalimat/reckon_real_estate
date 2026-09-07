@@ -6,6 +6,7 @@
   "is_submittable": 1,
   "track_changes": 1,
   "field_order": [
+    "record_title",
     "measurement_no",
     "details_section",
     "work_order",
@@ -25,6 +26,17 @@
     "amended_from"
   ],
   "fields": [
+    {
+      "fieldname": "record_title",
+      "label": "Name",
+      "fieldtype": "Data",
+      "read_only": 1,
+      "no_copy": 1,
+      "in_list_view": 1,
+      "allow_on_submit": 1,
+      "print_hide": 1,
+      "length": 140
+    },
     {
       "fieldname": "work_order",
       "fieldtype": "Link",
@@ -102,7 +114,7 @@
       "label": "Measurement No",
       "fieldtype": "Data",
       "read_only": 1,
-      "in_list_view": 1,
+      "in_list_view": 0,
       "unique": 1,
       "no_copy": 1
     },
@@ -148,5 +160,8 @@
     }
   ],
   "sort_field": "modified",
-  "sort_order": "DESC"
+  "sort_order": "DESC",
+  "title_field": "record_title",
+  "show_title_field_in_link": 1,
+  "search_fields": "record_title,project,contractor,measurement_no"
 }

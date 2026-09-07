@@ -14,9 +14,18 @@ class PropertyBooking(Document):
         unit = frappe.get_doc("Real Estate Unit", self.unit)
         if unit.project != self.project:
             frappe.throw("Unit must belong to the selected Project.")
-        if self.is_new():
+        previous = self.get_doc_before_save()
+        # Recheck drafts on every save and submission. An existing submitted
+        # booking owns a Booked unit and must still support normal later updates.
+        if not previous or previous.docstatus == 0:
+            project = frappe.get_doc("Real Estate Project", self.project)
+            if project.docstatus != 1 or project.status != "Active":
+                frappe.throw("Select an active, submitted Real Estate Project for booking.")
+            if unit.docstatus != 1 or unit.status != "Available":
+                frappe.throw("Select an available, submitted Unit for booking.")
             active = frappe.db.exists("Property Booking", {
                 "unit": self.unit,
+                "name": ["!=", self.name],
                 "status": ["in", ["Reserved", "Confirmed", "Agreement Signed", "Active"]],
                 "docstatus": ["!=", 2],
             })

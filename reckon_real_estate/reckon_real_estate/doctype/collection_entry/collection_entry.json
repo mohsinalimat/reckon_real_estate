@@ -6,6 +6,7 @@
   "allow_rename": 1,
   "engine": "InnoDB",
   "field_order": [
+    "record_title",
     "collection_no",
     "details_section",
     "collection_date",
@@ -32,6 +33,17 @@
   ],
   "fields": [
     {
+      "fieldname": "record_title",
+      "label": "Name",
+      "fieldtype": "Data",
+      "read_only": 1,
+      "no_copy": 1,
+      "in_list_view": 1,
+      "allow_on_submit": 1,
+      "print_hide": 1,
+      "length": 140
+    },
+    {
       "fieldname": "collection_no",
       "fieldtype": "Data",
       "label": "Collection No",
@@ -39,7 +51,7 @@
       "read_only": 1,
       "unique": 1,
       "no_copy": 1,
-      "in_list_view": 1
+      "in_list_view": 0
     },
     {
       "fieldname": "collection_date",
@@ -203,6 +215,8 @@
   ],
   "sort_field": "modified",
   "sort_order": "DESC",
-  "title_field": "collection_no",
-  "is_submittable": 1
+  "title_field": "record_title",
+  "is_submittable": 1,
+  "show_title_field_in_link": 1,
+  "search_fields": "record_title,collection_no,customer,project,unit"
 }

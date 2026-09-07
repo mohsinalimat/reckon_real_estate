@@ -1,5 +1,8 @@
+from reckon_real_estate.display_names import with_link_names
+
 import frappe
 
+@with_link_names
 def execute(filters=None):
     columns = [
         {"label": "Project", "fieldname": "project", "fieldtype": "Link", "options": "Real Estate Project", "width": 180},

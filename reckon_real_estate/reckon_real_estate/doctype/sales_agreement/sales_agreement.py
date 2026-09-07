@@ -1,5 +1,6 @@
 import frappe
 from frappe.model.document import Document
+from reckon_real_estate.agreement_defaults import defaults_for_booking, fill_empty_fields
 
 from reckon_real_estate.construction_workflow import (
     block_if_submitted,
@@ -13,12 +14,19 @@ from reckon_real_estate.construction_workflow import (
 class SalesAgreement(Document):
     def validate(self):
         set_draft_status(self, "agreement_no", "document_status")
+        previous = self.get_doc_before_save()
+        if previous and previous.booking != self.booking:
+            frappe.throw("Create a new Sales Agreement to use a different Property Booking.")
         booking = frappe.get_doc("Property Booking", self.booking)
         self.customer, self.project, self.unit = booking.customer, booking.project, booking.unit
         self.company = frappe.db.get_value("Real Estate Project", booking.project, "company")
         self.contract_value, self.discount = booking.contract_value, booking.discount
         self.net_contract_value, self.booking_money = booking.net_contract_value, booking.booking_money
         self.buyer_name = frappe.db.get_value("Customer", self.customer, "customer_name") or self.customer
+        if self.is_new():
+            defaults = defaults_for_booking(self.booking)
+            fill_empty_fields(self, defaults)
+            self.property_description = defaults["property_description"]
         duplicate = frappe.db.exists("Sales Agreement", {
             "booking": self.booking, "name": ["!=", self.name], "docstatus": ["!=", 2]
         })

@@ -15,6 +15,10 @@ after_install = "reckon_real_estate.setup.install.after_install"
 after_migrate = "reckon_real_estate.setup.install.after_migrate"
 
 doc_events = {
+    "*": {
+        "validate": "reckon_real_estate.display_names.set_record_title",
+        "on_update": "reckon_real_estate.display_names.refresh_referencing_titles",
+    },
     "Customer": {
         "on_update": "reckon_real_estate.events.customer.sync_customer"
     },

@@ -6,6 +6,7 @@
   "allow_rename": 1,
   "engine": "InnoDB",
   "field_order": [
+    "record_title",
     "booking_no",
     "details_section",
     "customer",
@@ -27,6 +28,17 @@
   ],
   "fields": [
     {
+      "fieldname": "record_title",
+      "label": "Name",
+      "fieldtype": "Data",
+      "read_only": 1,
+      "no_copy": 1,
+      "in_list_view": 1,
+      "allow_on_submit": 1,
+      "print_hide": 1,
+      "length": 140
+    },
+    {
       "fieldname": "booking_no",
       "fieldtype": "Data",
       "label": "Booking No",
@@ -34,7 +46,7 @@
       "read_only": 1,
       "unique": 1,
       "no_copy": 1,
-      "in_list_view": 1
+      "in_list_view": 0
     },
     {
       "fieldname": "customer",
@@ -162,6 +174,8 @@
   ],
   "sort_field": "modified",
   "sort_order": "DESC",
-  "title_field": "booking_no",
-  "is_submittable": 1
+  "title_field": "record_title",
+  "is_submittable": 1,
+  "show_title_field_in_link": 1,
+  "search_fields": "record_title,booking_no,customer,project,unit"
 }

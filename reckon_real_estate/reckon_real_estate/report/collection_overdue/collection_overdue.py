@@ -1,6 +1,9 @@
+from reckon_real_estate.display_names import with_link_names
+
 import frappe
 from frappe.utils import getdate, today, date_diff
 
+@with_link_names
 def execute(filters=None):
     columns = [
         {"label": "Plan", "fieldname": "plan", "fieldtype": "Link", "options": "Installment Plan", "width": 150},

@@ -11,6 +11,10 @@ APP_ROLES = (
     "Reckon Real Estate User",
     "Reckon Real Estate Manager",
 )
+APP_PRINT_FORMATS = (
+    ("Sales Agreement", "sales_agreement"),
+    ("Detailed Sales Agreement", "detailed_sales_agreement"),
+)
 APP_REPORTS = (
     "Accounting Reconciliation",
     "Budget vs Actual",
@@ -118,6 +122,9 @@ def after_install():
     cleanup_legacy_reports()
     ensure_erpnext_custom_fields()
     ensure_home_analytics()
+    ensure_agreement_print_formats()
+    from reckon_real_estate.display_names import setup_display_names
+    setup_display_names()
     validate_installation()
 
 
@@ -130,7 +137,18 @@ def after_migrate():
     cleanup_legacy_reports()
     ensure_erpnext_custom_fields()
     ensure_home_analytics()
+    ensure_agreement_print_formats()
+    from reckon_real_estate.display_names import setup_display_names
+    setup_display_names()
     validate_installation()
+
+
+def ensure_agreement_print_formats():
+    """Restore missing shipped formats without overwriting site customizations."""
+    for name, folder in APP_PRINT_FORMATS:
+        if not frappe.db.exists("Print Format", name):
+            frappe.reload_doc("reckon_real_estate", "print_format", folder, force=True)
+    frappe.clear_cache(doctype="Sales Agreement")
 
 
 def ensure_app_roles():
@@ -475,6 +493,15 @@ def cleanup_legacy_reports():
 def validate_installation():
     """Verify custom schema and the ERPNext masters linked by this app."""
     stack = validate_supported_stack()
+    missing_formats = [
+        name for name, _ in APP_PRINT_FORMATS if not frappe.db.exists("Print Format", name)
+    ]
+    if missing_formats:
+        frappe.throw(
+            "Agreement print formats are missing. Run the site's migration or "
+            "reckon_real_estate.setup.install.ensure_agreement_print_formats. "
+            f"Missing: {', '.join(missing_formats)}"
+        )
     missing = [doctype for doctype in REQUIRED_DOCTYPES if not frappe.db.exists("DocType", doctype)]
     if missing:
         frappe.throw(

@@ -1,7 +1,10 @@
+from reckon_real_estate.display_names import with_link_names
+
 import frappe
 from frappe.utils import date_diff, flt, getdate, today
 
 
+@with_link_names
 def execute(filters=None):
     filters = frappe._dict(filters or {})
     as_of_date = getdate(filters.as_of_date or today())

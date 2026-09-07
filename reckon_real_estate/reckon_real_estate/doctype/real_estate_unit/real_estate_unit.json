@@ -42,13 +42,14 @@
       "read_only": 1,
       "unique": 1,
       "no_copy": 1,
-      "in_list_view": 1
+      "in_list_view": 0
     },
     {
       "fieldname": "unit_no",
       "fieldtype": "Data",
       "label": "Unit No",
-      "reqd": 1
+      "reqd": 1,
+      "in_list_view": 1
     },
     {
       "fieldname": "project",
@@ -221,5 +222,7 @@
   "sort_field": "modified",
   "sort_order": "DESC",
   "title_field": "unit_no",
-  "is_submittable": 1
+  "is_submittable": 1,
+  "show_title_field_in_link": 1,
+  "search_fields": "unit_no,unit_code,project,building,floor"
 }

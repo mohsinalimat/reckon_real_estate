@@ -1,0 +1,40 @@
+const assert = require('node:assert/strict');
+const fs = require('node:fs');
+const vm = require('node:vm');
+const path = require('node:path');
+const pending = [];
+const context = vm.createContext({
+    frappe: { ui: { form: { on() {} } }, call: () => new Promise(resolve => pending.push(resolve)) },
+});
+vm.runInContext(fs.readFileSync(path.join(__dirname, '../reckon_real_estate/doctype/sales_agreement/sales_agreement.js'), 'utf8'), context);
+const fill = context.fill_agreement_defaults;
+const form = () => ({doc: {booking: 'B1'}, async set_value(values) { Object.assign(this.doc, values); }});
+(async () => {
+    const frm = form();
+    let task = fill(frm);
+    pending.shift()({message: {buyer_name: 'Buyer 1', buyer_address: 'Address 1', terms: 'Sample'}});
+    await task;
+    assert.equal(frm.doc.buyer_name, 'Buyer 1');
+    frm.doc.terms = 'Negotiated';
+    task = fill(frm);
+    pending.shift()({message: {buyer_name: 'Buyer 1', buyer_address: 'Address 1', terms: 'Sample'}});
+    await task;
+    assert.equal(frm.doc.terms, 'Negotiated');
+    frm.doc.buyer_address = 'Edited address of buyer 1';
+    frm.doc.booking = 'B2';
+    task = fill(frm);
+    pending.shift()({message: {buyer_name: 'Buyer 2', buyer_address: 'Address 2', terms: 'Sample'}});
+    await task;
+    assert.equal(frm.doc.buyer_address, 'Address 2');
+    assert.equal(frm.doc.terms, 'Negotiated');
+    const first = fill(frm);
+    frm.doc.booking = 'B3';
+    const second = fill(frm);
+    const stale = pending.shift();
+    pending.shift()({message: {buyer_name: 'Buyer 3'}});
+    await second;
+    stale({message: {buyer_name: 'Wrong buyer'}});
+    await first;
+    assert.equal(frm.doc.buyer_name, 'Buyer 3');
+    console.log('PASS autofill, edited terms, booking changes and stale response protection');
+})().catch(error => { console.error(error); process.exitCode = 1; });

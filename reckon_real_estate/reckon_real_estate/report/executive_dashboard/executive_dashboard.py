@@ -1,7 +1,10 @@
+from reckon_real_estate.display_names import with_link_names
+
 import frappe
 from frappe.utils import flt, today
 
 
+@with_link_names
 def execute(filters=None):
     filters=frappe._dict(filters or {})
     projects=frappe.get_all("Real Estate Project",filters={"name":filters.project} if filters.project else {},pluck="name")
